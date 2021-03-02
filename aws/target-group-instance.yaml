@@ -1,0 +1,45 @@
+###################################################################################
+# target-group-instance.yaml
+#
+# author: mS - mshoaibshafi AT gmail.com
+# 
+#
+# AWS CF Link : https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#
+#
+# Create Target Group with TargetType : Instance
+###################################################################################
+
+
+Resources:
+  TestTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+     HealthCheckEnabled: Yes
+     HealthCheckIntervalSeconds: 30
+     HealthCheckPath: /
+     HealthCheckPort: traffic-port
+     HealthCheckProtocol: HTTP
+     HealthCheckTimeoutSeconds: 5
+     HealthyThresholdCount: 5
+     Matcher: 
+      HttpCode: '200'
+     Name: TargetGroupName
+     Port: 80
+     Protocol: HTTP
+     ProtocolVersion: HTTP1
+     Tags: 
+       - Key: Owner
+         Value: MyName
+       - Key: Contact
+         Value: myname@myname.com
+     TargetGroupAttributes: 
+       - Key: stickiness.enabled
+         Value: true
+       - Key: stickiness.type
+         Value: lb_cookie
+     Targets:
+     - Id: i-000108e891fdac9cb
+       Port: 80
+     TargetType: instance
+     UnhealthyThresholdCount: 2
+     VpcId: vpc-111b6232
