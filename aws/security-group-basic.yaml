@@ -1,0 +1,47 @@
+
+###################################################################################
+# security-group-basic.yaml
+#
+# author: mS - mshoaibshafi AT gmail.com
+# 
+#
+# AWS CF Link : https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#cfn-ec2-securitygroup-vpcid
+#
+# Very basic cloud formation template to create a security group
+###################################################################################
+
+
+Resources:
+  TestSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+        GroupDescription: Group Desc Test
+        GroupName: Group Name Test Security Group
+        VpcId: vpc-566b6232
+        Tags: 
+          - Key: Owner
+            Value: MyName
+          - Key: Contact
+            Value: myname@myname.com
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            Description: HTTP Access from AnyWhere
+            FromPort: 80
+            ToPort: 80
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: udp
+            Description: SNMP Access
+            FromPort: 161
+            ToPort: 161
+            CidrIp: 192.168.100.100/32
+        SecurityGroupEgress:
+          - IpProtocol: tcp
+            FromPort: 80
+            ToPort: 80
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            Description: SSH Access 
+            CidrIp: 192.168.20.0/24
+
