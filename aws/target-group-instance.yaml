@@ -38,7 +38,7 @@ Resources:
        - Key: stickiness.type
          Value: lb_cookie
      Targets:
-     - Id: i-000108e891fdac9cb
+     - Id: i-111108e891fdac9cb
        Port: 80
      TargetType: instance
      UnhealthyThresholdCount: 2

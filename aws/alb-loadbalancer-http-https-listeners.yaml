@@ -1,0 +1,123 @@
+###################################################################################
+# alb-loadbalancer-http-https-listeners.yaml
+#
+# author: mS - mshoaibshafi AT gmail.com
+# 
+#
+# AWS LB CF Link : https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/AWS_ElasticLoadBalancingV2.html
+#
+# Create ALB Load balancer 
+#
+# Four Step Process 
+# 0. Fill up the Parameters section with specific values e.g. VPCID, InstanceID, SG, Subnets etc.
+# 1. Create Target Group
+# 2. Create an Application Load balancer
+# 3. Create HTTP Listener and enable redirect from 80 to 443
+# 4. Create HTTPs Listener and attach to the Target Group
+###################################################################################
+
+#### Parameters ####
+Parameters:
+  MyVPC: 
+    Type: String
+    Default: vpc-111b6232
+  MyInstanceId: 
+    Type: String
+    Default: i-111118e891fdac9cb
+  MySecurityGroup:
+    Type: String
+    Default: sg-11111c41377a9ab8c
+  MySubnets:
+    Type: CommaDelimitedList
+    Default: "subnet-11eb107b, subnet-116dc72f"
+  MyCertificate:
+    Type: String
+    Default: arn:aws:acm:us-west-1:111111111111:certificate/11111d0e-3c11-4ad6-b42a-ce389b111111
+
+Resources:
+##### Target Group ####
+  TestTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+     HealthCheckEnabled: Yes
+     HealthCheckIntervalSeconds: 30
+     HealthCheckPath: /
+     HealthCheckPort: traffic-port
+     HealthCheckProtocol: HTTP
+     HealthCheckTimeoutSeconds: 5
+     HealthyThresholdCount: 5
+     Matcher: 
+      HttpCode: '200'
+     Name: TargetGroupName
+     Port: 80
+     Protocol: HTTP
+     ProtocolVersion: HTTP1
+     Tags: 
+       - Key: Owner
+         Value: MyName
+       - Key: Contact
+         Value: myname@myname.com
+     TargetGroupAttributes: 
+       - Key: stickiness.enabled
+         Value: true
+       - Key: stickiness.type
+         Value: lb_cookie
+     Targets:
+     - Id: !Ref MyInstanceId
+       Port: 80
+     TargetType: instance
+     UnhealthyThresholdCount: 2
+     VpcId: !Ref MyVPC
+
+#### Load Balancer ####
+  TestLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      LoadBalancerAttributes: 
+        - Key: idle_timeout.timeout_seconds
+          Value: 120
+      Name: TestALBLoadBalancer
+      Scheme: internet-facing
+      Type: application
+      SecurityGroups: 
+        - !Ref MySecurityGroup
+      Subnets: 
+        - !Select [0, !Ref MySubnets]
+        - !Select [1, !Ref MySubnets]
+      Tags: 
+        - Key: Owner
+          Value: MyName
+        - Key: Contact
+          Value: myname@myname.com
+
+#### HTTP Listener & Enable redirection from 80 to 443 ####
+  TestLoadbalancerListenerHTTP:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      DefaultActions:
+        - Type: "redirect"
+          RedirectConfig:
+            Protocol: "HTTPS"
+            Port: 443
+            Host: "#{host}"
+            Path: "/#{path}"
+            Query: "#{query}"
+            StatusCode: "HTTP_301"
+      LoadBalancerArn: !Ref TestLoadBalancer
+      Port: 80
+      Protocol: "HTTP"
+
+#### HTTPs Listener ####
+  TestLoadbalancerListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TestTargetGroup 
+      Certificates: 
+        - !Ref MyCertificate
+      LoadBalancerArn: !Ref TestLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS-1-1-2017-01
