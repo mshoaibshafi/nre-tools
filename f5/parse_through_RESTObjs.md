@@ -2,13 +2,13 @@
 
 ## How to find the REST URI
 
-- F5 GUI : https://<f5-mgmt-ip>/mgmt/tm/ltm/
+- F5 GUI : https://\<f5-mgmt-ip\>/mgmt/tm/ltm/
 
 ## Persistence Profile
-- https://<f5-mgmt-ip>/mgmt/tm/ltm/persistence/
+- https://\<f5-mgmt-ip\>/mgmt/tm/ltm/persistence/
 
 ## Cookie Persistence Profile
-- https://<f5-mgmt-ip>/mgmt/tm/ltm/persistence/cookie
+- https://\<f5-mgmt-ip\>/mgmt/tm/ltm/persistence/cookie
 
 ```python
   >>> from bigrest.bigip import BIGIP
