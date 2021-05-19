@@ -1,6 +1,6 @@
 # Parse Through BigIP REST Objects
 
-## How to find the REST URI
+## F5 REST API URI
 
 - F5 GUI : https://\<f5-mgmt-ip\>/mgmt/tm/ltm/
 
