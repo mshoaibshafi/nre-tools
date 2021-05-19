@@ -1,7 +1,15 @@
 # Parse Through BigIP REST Objects
 
+## How to find the REST URI
 
-# Persistence Profile
+- F5 GUI : https://<f5-mgmt-ip>/mgmt/tm/ltm/
+
+## Persistence Profile
+- https://<f5-mgmt-ip>/mgmt/tm/ltm/persistence/
+
+## Cookie Persistence Profile
+- https://<f5-mgmt-ip>/mgmt/tm/ltm/persistence/cookie
+
 ```python
   >>> from bigrest.bigip import BIGIP
   >>> b = BIGIP(ip, username, password)
@@ -11,14 +19,14 @@
   >>>
 ```
 
-## LIST -  check <item>[0]
-## dir() - ????
+### LIST -  check <item>[0]
+### dir() - ????
 
 ```python
   >>> dir(cookie_profiles[0])
     ['__class__', '__delattr__', '__dict__',  '__dir__',   '__doc__', '__eq__', '__format__',  '__ge__',  '__getattribute__', '__gt__',   '__hash__', '__init__',  '__init_subclass__',   '__le__', '__lt__',   '__module__', '__ne__',   '__new__', '__reduce__',  '__reduce_ex__',  '__repr__', '__setattr__',  '__sizeof__',  '__str__', '__subclasshook__',   '__weakref__',  'asdict', 'properties']
 ```
-## PROPERTIES - check its type
+### PROPERTIES - check its type
 
 ```python
   >>> type(cookie_profiles[0].properties)
@@ -26,11 +34,8 @@
   >>>
 ```
 
-## DICT
-## Display whole dict ( both key / value )
-## Display all keys
-## Display all values
-## Display one key-value pair
+### DICT
+### Display whole dict ( both key / value )
 
 ```python
     >>> cookie_profiles[0].properties
@@ -38,7 +43,7 @@
     >>>
 ```
 
-## All Keys
+### All Keys
 
 ```python
   >>> cookie_profiles[0].properties.keys()
@@ -48,7 +53,7 @@
 ```
 
 
-## Display all values
+### Display all values
 
 ```python
   >>> cookie_profiles[0].properties.values()
@@ -56,7 +61,7 @@
   >>>
 ```
 
-## Display one key-value pair
+### Display one key-value pair
 
 ```python
   >>> cookie_profiles[0].properties['name']
@@ -65,7 +70,7 @@
 ```
 
 
-## dir() - definition
+### dir() - definition
 
 ```python
   >>> dir(cookie_profiles)
