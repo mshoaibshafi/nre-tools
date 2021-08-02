@@ -11,3 +11,5 @@ In a go-lang empty directory run
 
 
 * go get github.com/joho/godotenv@v1.0.3 # to ge tthe specific version ... it will update the go.mod file too
+
+* go mod vendor # create a local dir for vendor dependencies 
